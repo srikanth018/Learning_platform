@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.chart-container {
+  overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+  overflow-y: hidden; /* Hide vertical overflow if not needed */
+  padding: 10px; /* Add padding around the container */
+}
+
+.chart {
+  min-width: 600px; /* Set a minimum width for the chart */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0; /* For WebKit browsers (Chrome, Safari) */
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  scrollbar-width: none;     /* For Firefox */
+}
+
+
+
+.eb-garamond-normal {
+  font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.karla-normal {
+    font-family: "Karla", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+  }
+.slider-container {
+  position: relative;
+  height: 12px;
+  padding: 13px;
+  background-color: #e0e0e0; 
+  border-radius: 20px;
+}
+
+.slider-progress {
+  position: absolute;
+  height: 10px;
+  top: 0px;
+  background-color: #007bff; 
+  border-radius: 1px;
+}
+
+/* .slider-thumb {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider-label {
+  position: absolute;
+  bottom: 24px;
+  background-color: #000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.slider-label::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #000;
+  transform: translateX(-50%);
+} */
+
+
+
+/* Custom style for range input thumb */
+.slider-month::-webkit-slider-thumb,
+.slider-year::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  position: relative;
+  top: -6px;
+  background-color: #007bff; /* Thumb color */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.slider-month::-moz-range-thumb,
+.slider-year::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: #007bff; /* Thumb color */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.slider-month::-ms-thumb,
+.slider-year::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: #007bff; /* Thumb color */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* Optional: Styling for the range input track */
+.slider-month,
+.slider-year {
+  accent-color: #007bff; /* Track color */
+}
+
+.slider-month::-webkit-slider-runnable-track,
+.slider-year::-webkit-slider-runnable-track {
+  height: 4px;
+  background: #ddd; /* Track color */
+  border-radius: 2px;
+}
+
+.slider-month::-moz-range-track,
+.slider-year::-moz-range-track {
+  height: 4px;
+  background: #ddd; /* Track color */
+  border-radius: 2px;
+}
+
+.slider-month::-ms-track,
+.slider-year::-ms-track {
+  height: 4px;
+  background: #ddd; /* Track color */
+  border-radius: 2px;
+}
