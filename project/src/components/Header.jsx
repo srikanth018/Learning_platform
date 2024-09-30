@@ -34,10 +34,9 @@ function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDate
     <header className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 p-4 relative">
       <div>
         <h1 className={`text-xl hidden sm:block font-bold ${theme === 'light' ? 'text-black' : 'text-gray-400'}`}>
-         NPD Production <span className="text-[#879FFF]">Performance</span> Dashboard
-         <span className='text-sm text-gray-400 font-thin'>   (Sample)</span>
+         A Learning <span className="text-[#879FFF]">Platform</span> App
         </h1>
-        <p className="text-sm text-gray-500">Welcome to Automated Dash View</p>
+        <p className="text-sm text-gray-500">Learning made easier</p>
       </div>
       <div className="flex items-center gap-5 m-0">
         <p className={`hidden sm:block md:block lg:block sl:block ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>{currentTime}</p>

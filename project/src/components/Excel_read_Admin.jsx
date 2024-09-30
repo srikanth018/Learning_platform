@@ -267,7 +267,8 @@ function Dashboard() {
   };
   
 
- 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <div className={` w-[100%] min-h-screen flex overflow-auto ${theme==='light'?'bg-gray-100 ':
     'bg-gray-800 '} `}>
@@ -279,12 +280,111 @@ function Dashboard() {
         <main className={`flex-1 px-4 overflow-y-auto ${filter_on===true?'opacity-10':'opacity-100'}`}>
         
           {/* Department Cards */}
-          <div className={`${viewData ? 'relative overflow-x-auto':'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2'}`}>
+          {/* <div className={`${viewData ? 'relative overflow-x-auto':'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2'}`}>
         {viewData
           ? renderTable(departmentData, pendingDepartmentData)
           : renderCards(departmentData, pendingDepartmentData)}
+</div> */}
+
+{/* ///////////////////////////////////////// */}
+
+
+<div className="max-w-full">
+  <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+    Our service statistics
+  </h2>
+  <div className="grid grid-cols-1 gap-5 sm:grid-cols-4 mt-4">
+    <div className="bg-white overflow-hidden shadow-lg border border-gray-200 sm:rounded-lg dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform transform hover:scale-105 duration-200">
+      <div className="px-6 py-8 sm:p-10">
+        <dl>
+          <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Courses offered</dt>
+          <dd className="mt-1 text-4xl leading-9 font-semibold text-indigo-600 dark:text-indigo-400 mt-4">100</dd>
+        </dl>
+      </div>
+    </div>
+    <div className="bg-white overflow-hidden shadow-lg border border-gray-200 sm:rounded-lg dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform transform hover:scale-105 duration-200">
+      <div className="px-6 py-8 sm:p-10">
+        <dl>
+          <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Tutors</dt>
+          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">19</dd>
+        </dl>
+      </div>
+    </div>
+    <div className="bg-white overflow-hidden shadow-lg border border-gray-200 sm:rounded-lg dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform transform hover:scale-105 duration-200">
+      <div className="px-6 py-8 sm:p-10">
+        <dl>
+          <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Enrolled Courses</dt>
+          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">71</dd>
+        </dl>
+      </div>
+    </div>
+    <div className="bg-white overflow-hidden shadow-lg border border-gray-200 sm:rounded-lg dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform transform hover:scale-105 duration-200">
+      <div className="px-6 py-8 sm:p-10">
+        <dl>
+          <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Completed Courses</dt>
+          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">16</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>
 
+
+
+
+<div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <a href="#">
+        <img class="rounded-t-lg" src="https://imgs.search.brave.com/r5ocd6T0ptqpInOe1ZQuvqsnIyWMCZdBIAck-Sw3CH8/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9ibG9n/LmxvZ3JvY2tldC5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjIvMDQvUHJvZ3Jl/c3NpdmUtaW1hZ2Ut/bG9hZGluZy1SZWFj/dC10dXRvcmlhbC5w/bmc" alt="" />
+    </a>
+    <div class="p-5">
+        <a href="#">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+        </a>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Read more
+             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+        </a>
+    </div>
+</div>
+
+
+    <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+      {isPlaying ? (
+        <div className="relative w-full h-0" style={{ paddingBottom: "56.25%" }}>
+          <iframe
+            className="absolute top-0 left-0 w-full h-full"
+            src="https://www.youtube.com/embed/NH6pOQpHvqE?autoplay=1"
+            title="YouTube Video Player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      ) : (
+        <button onClick={() => setIsPlaying(true)} className="w-full">
+          <img
+            className="w-full h-48 object-cover"
+            src="https://img.youtube.com/vi/NH6pOQpHvqE/hqdefault.jpg"
+            alt="YouTube Thumbnail"
+          />
+        </button>
+      )}
+      <div className="p-4">
+        <h2 className="text-xl font-bold">YouTube Video Title</h2>
+        <p className="mt-2 text-gray-600">This is a brief description of the video.</p>
+        <a
+          href="https://youtu.be/NH6pOQpHvqE?si=GItf8-Qm2tozRTLD"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block mt-4 bg-blue-500 text-white text-center py-2 rounded"
+        >
+          Watch on YouTube
+        </a>
+      </div>
+    </div>
+{/* ////////////////////////////////////////// */}
         </main>
       </div>
 
