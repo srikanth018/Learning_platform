@@ -31,7 +31,7 @@ function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDate
   };
 
   return (
-    <header className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 p-4 relative">
+    <header className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-2 relative">
       <div>
         <h1 className={`text-xl hidden sm:block font-bold ${theme === 'light' ? 'text-black' : 'text-gray-400'}`}>
          A Learning <span className="text-[#879FFF]">Platform</span> App

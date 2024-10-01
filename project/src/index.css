@@ -151,3 +151,17 @@
   background: #ddd; /* Track color */
   border-radius: 2px;
 }
+
+
+pre {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  white-space: pre-wrap; /* Preserve newlines and spaces */
+  overflow-x: auto; /* Add horizontal scroll for long code lines */
+}
+
+code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+}

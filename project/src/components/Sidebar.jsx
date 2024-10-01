@@ -33,7 +33,14 @@ function Sidebar({ theme }) {
     } else if (path === '/courses') {
       setActive('courses');
       setActiveSubTask('');
-    } else if (path === '/settings') {
+    }else if (path === '/compiler') {
+      setActive('compiler');
+      setActiveSubTask('');
+    } else if (path === '/bot') {
+      setActive('bot');
+      setActiveSubTask('');
+    } 
+    else if (path === '/settings') {
       setActive('settings');
       setActiveSubTask('');
     } 
@@ -120,7 +127,7 @@ function Sidebar({ theme }) {
         </div>
         <nav className="mt-5">
         <nav className="mt-5">
-        { role == 'admin' && <a
+        {<a
             href="#"
             className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('home')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
             onClick={() => handleNavigation('/', 'home')}
@@ -132,6 +139,8 @@ function Sidebar({ theme }) {
               Home
             </div>
           </a>}
+          
+
 
           <a
             href="#"
@@ -145,6 +154,33 @@ function Sidebar({ theme }) {
               Courses
             </div>
           </a>
+
+          <a
+            href="#"
+            className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('compiler')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
+            onClick={() => handleNavigation('/compiler', 'compiler')}
+          >
+            <div className='flex flex-row p-2'>
+              <div className='mt-1 px-2'>
+                <ImHome />
+              </div>
+              Compiler
+            </div>
+          </a>
+
+          <a
+            href="#"
+            className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('bot')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
+            onClick={() => handleNavigation('/bot', 'bot')}
+          >
+            <div className='flex flex-row p-2'>
+              <div className='mt-1 px-2'>
+                <ImHome />
+              </div>
+              AI Chatbot
+            </div>
+          </a>
+
 
 {/* 
           
@@ -205,7 +241,7 @@ function Sidebar({ theme }) {
           )}
 
  */}
-          { role == 'admin' && <a
+          {<a
             href="#"
             className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('settings')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
             onClick={() => handleNavigation('/settings', 'settings')}
