@@ -1,17 +1,14 @@
+import dotenv from 'dotenv';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import express from 'express';
+import mysql from 'mysql';
+import cors from 'cors';
+import axios from 'axios';
+import multer from 'multer';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const dotenv = require('dotenv');
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
-const multer = require('multer');
-const xlsx = require('xlsx');
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-const moment = require('moment');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); 
-const axios = require('axios');
 
 const app = express();
 app.use(cors());
@@ -107,50 +104,6 @@ app.post('/compile', async (req, res) => {
   }
 });
 
-
-
-
-// dotenv.config();
-
-
-// const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-
-// let generatedText = { title: '', content: '' };
-
-// app.post('/api/generate-recipe', async (req, res) => {
-//     try {
-//         const { title } = req.body;
-//         const prompt = `${title}`;
-//         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-//         const result = await model.generateContent(prompt);
-//         const response = await result.response;
-//         let text = response.text().toString();
-
-//         // Process and format the text
-//         text = text
-//         .replace(/\\(.?)/g, '<b>$1</b>') // Replace backslashes with bold
-//         .replace(/\/(.?)/g, '<i>$1</i>'); // Replace forward slashes with italics
-
-
-//         const [recipeTitle, ...contentParts] = text.split('\n');
-//         const content = contentParts.join('<br>');
-
-//         generatedText = {
-//             title: recipeTitle,
-//             content: content
-//         };
-
-
-//         res.json({
-//             title: recipeTitle,
-//             content: content.replace(/(?:\r\n|\r|\n)/g, '<br>')
-//         });
-//     } catch (error) {
-//         console.error('Error generating recipe:', error);
-//         res.status(500).json({ error: 'Failed to generate recipe' });
-//     }
-// });
-
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
@@ -176,6 +129,71 @@ app.post('/api/chatbot', async (req, res) => {
         res.status(500).json({ error: 'Failed to generate response' });
     }
 });
+
+
+// Simulating __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Set up multer for file uploads without saving to disk
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+let pythonProcess = null; // Store reference to the Python process
+
+// Endpoint to process uploaded PDF and play audio
+app.post('/play-pdf', upload.single('pdfFile'), (req, res) => {
+    const pdfBuffer = req.file.buffer; // Get the uploaded PDF file as a buffer
+    const { rate, voice } = req.body; // Get rate and voice from request body
+
+    if (pythonProcess) {
+        pythonProcess.kill(); // Stop any running process
+    }
+
+    // Pass rate and voice options to the Python script
+    pythonProcess = spawn('python', [path.join(__dirname, 'pdf_audio_GUI.py'), rate, voice]);
+
+    // Write the PDF buffer to the Python process
+    pythonProcess.stdin.write(pdfBuffer);
+    pythonProcess.stdin.end(); // Close stdin
+
+    // Set up a flag to track if the response has been sent
+    let responseSent = false;
+
+    pythonProcess.stdout.on('data', (data) => {
+        console.log(`Output: ${data}`);
+        if (!responseSent) {
+            res.json({ message: data.toString() });
+            responseSent = true; // Mark response as sent
+        }
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Error: ${data}`);
+        if (!responseSent) {
+            res.status(500).json({ error: data.toString() });
+            responseSent = true; // Mark response as sent
+        }
+    });
+
+    pythonProcess.on('exit', (code) => {
+        console.log(`Python process exited with code ${code}`);
+        pythonProcess = null; // Reset the reference when process ends
+    });
+});
+
+// Endpoint to stop the audio playback
+app.post('/stop-pdf', (req, res) => {
+    if (pythonProcess) {
+        pythonProcess.kill(); // Stop the Python process
+        pythonProcess = null; // Reset the reference
+        res.json({ message: 'Playback stopped' });
+    } else {
+        res.status(400).json({ error: 'No playback in progress' });
+    }
+});
+
+
 
 
 

@@ -8,6 +8,7 @@ import Detailed_course from'./components/Learning/Detailed_course';
 import Compiler from './components/Learning/Compiler'
 import Login from './components/Login'
 import AiChatBot from './components/Learning/AiChatBot';
+import Pdf from './components/Learning/PdfUploader ';
 
 function App() {
 
@@ -22,6 +23,8 @@ function App() {
         {/* <Route path='/compiler' element={<Compiler/>} /> */}
         <Route path='/compiler' element={<Compiler/>} />
         <Route path='/bot' element={<AiChatBot/>} />
+        <Route path='/pdfreader' element={<Pdf/>} />
+
 
         {/* <Route path='/login' element={< Login/>} /> */}
       </Routes>
