@@ -8,7 +8,8 @@ import multer from 'multer';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 app.use(cors());
@@ -68,6 +69,41 @@ app.get('/api/courses_list', (req, res) => {
     });
   });
 
+
+
+  
+  app.post('/api/register', async (req, res) => {
+    const { username, email, password, role } = req.body;
+  
+    try {
+      // Check if user already exists
+      const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+      if (rows.length > 0) {
+        return res.status(400).json({ message: 'User already exists' });
+      }
+  
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Insert user into the database
+      const query = 'INSERT INTO users (user_id, username, email, password, role) VALUES (?, ?, ?, ?, ?)';
+      const userId = `USR${Math.random().toString(36).substr(2, 9)}`; // Generate random user ID
+      await db.query(query, [userId, username, email, hashedPassword, role]);
+  
+      // Generate JWT token
+      const token = jwt.sign({ email, role }, 'learnGlobs', { expiresIn: '1h' });
+  
+      res.status(201).json({
+        message: 'User registered successfully',
+        token,
+        user: { username, role }
+      });
+    } catch (err) {
+      console.error('Error during registration:', err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
 
   const JDoodle_Client_Id = 'c4df430ac08c4d3852ccc21c4c8a940d';
 const JDoodle_Client_Secret = '673ec0904f9124a4f8f31515257af18a124f0cbedaf7466fa51e0797f17f9b07';
@@ -194,7 +230,19 @@ app.post('/stop-pdf', (req, res) => {
 });
 
 
+// API to handle course enrollment
+app.post('/enroll', async (req, res) => {
+  const { course_id, user_id } = req.body; // Get user_id from req if required
 
+  try {
+    // Insert into enrollment table (or any logic to handle enrollment)
+    await db.query('INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)', [user_id, course_id]);
+    res.status(200).json({ message: 'Enrolled successfully' });
+  } catch (err) {
+    console.error("Error enrolling in course:", err);
+    res.status(500).json({ message: 'Error enrolling in course' });
+  }
+});
 
 
 

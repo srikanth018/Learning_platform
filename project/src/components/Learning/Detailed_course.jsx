@@ -67,14 +67,24 @@ const Detailed_course = () => {
     }
   };
 
-  const handleEnroll = async(course_id)=>{
-    console.log("srgdj",course_id)
-    
-    navigate(`/courses/detailed_course/${course_id}`, {
-      state: { course_id },
-    });
-    window.location.reload();
-  }
+  const handleEnroll = async(course_id) => {
+    try {
+      // Assuming a backend API call to enroll the user
+      await axios.post(`http://localhost:5000/enroll`, { course_id });
+  
+      // Navigate to the success page
+      navigate(`/enrollment-success`, {
+        state: { 
+          course_name: overAllData.course_name, 
+          course_description: overAllData.course_description,
+          course_id: course_id
+        },
+      });
+    } catch (err) {
+      console.error("Error enrolling in course:", err);
+    }
+  };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -95,7 +105,8 @@ const Detailed_course = () => {
                 </p>
               </div>
               <div className="mt-6">
-                <button className="py-3 px-6 w-full inline-flex items-center text-xl font-medium text-center bg-green-200 border-green-500 border-2 rounded-lg hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-green-300 text-green-800">
+                <button className="py-3 px-6 w-full inline-flex items-center text-xl font-medium text-center bg-green-200 border-green-500 border-2 rounded-lg hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-green-300 text-green-800"
+                onClick={()=>handleEnroll(course_id)}>
                   Enroll for Free
                   <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
@@ -165,7 +176,7 @@ const Detailed_course = () => {
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{course.course_description}</p>
                 <button
                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center bg-green-200 border-green-500 border-2 rounded-lg hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700"
-                  onClick={() => handleEnroll(course.course_id)}
+                  // onClick={() => handleEnroll(course.course_id)}
                 >
                   Enroll
                 </button>

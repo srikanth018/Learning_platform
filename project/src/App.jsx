@@ -9,6 +9,8 @@ import Compiler from './components/Learning/Compiler'
 import Login from './components/Login'
 import AiChatBot from './components/Learning/AiChatBot';
 import Pdf from './components/Learning/PdfUploader ';
+import EnrollmentSuccessPage from './components/Learning/EnrollmentSuccessPage';
+import Register from './components/Register';
 
 function App() {
 
@@ -24,6 +26,8 @@ function App() {
         <Route path='/compiler' element={<Compiler/>} />
         <Route path='/bot' element={<AiChatBot/>} />
         <Route path='/pdfreader' element={<Pdf/>} />
+        <Route path='/enrollment-success' element={<EnrollmentSuccessPage/>} />
+        <Route path='/register' element={<Register/>} />
 
 
         {/* <Route path='/login' element={< Login/>} /> */}

@@ -39,7 +39,10 @@ function Sidebar({ theme }) {
     } else if (path === '/bot') {
       setActive('bot');
       setActiveSubTask('');
-    } 
+    } else if (path === '/pdfreader') {
+      setActive('pdfreader');
+      setActiveSubTask('');
+    }
     else if (path === '/settings') {
       setActive('settings');
       setActiveSubTask('');
@@ -181,6 +184,18 @@ function Sidebar({ theme }) {
             </div>
           </a>
 
+          <a
+            href="#"
+            className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('pdfreader')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
+            onClick={() => handleNavigation('/pdfreader', 'pdfreader')}
+          >
+            <div className='flex flex-row p-2'>
+              <div className='mt-1 px-2'>
+                <GrProjects />
+              </div>
+              PDF Reader
+            </div>
+          </a>
 
 {/* 
           

@@ -28,5 +28,5 @@
     "url": "^0.11.4",
     "xlsx": "^0.18.5"
   },
-  "type": "module" 
+  "type": "module"
 }
