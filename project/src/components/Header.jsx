@@ -3,11 +3,14 @@ import { BsSun, BsMoon } from "react-icons/bs";
 import { ImSearch } from 'react-icons/im';
 import { IoCardOutline, IoFilterOutline } from "react-icons/io5";
 import { ImTable2 } from 'react-icons/im';
+import { useNavigate } from 'react-router-dom';
+
 function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDateRangeChange }) {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
   const [showFilter, setShowFilter] = useState(false); 
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -28,6 +31,15 @@ function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDate
       // Optionally handle invalid date range (e.g., show a message)  
     }
     on_filter(!filter);
+  };
+
+  const handleLogout = () => {
+    // Clear token and role from localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
+    // Redirect to login page
+    navigate('/login');
   };
 
   return (
@@ -54,43 +66,6 @@ function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDate
           </div>
         </div>
 
-        {/* <div className="relative">
-          <button
-            onClick={() => setShowFilter(!showFilter)}
-            className={`p-2 rounded-md ${theme === 'light' ? 'bg-white' : 'bg-gray-700'}`}
-            aria-label="Toggle Filter"
-          >
-            <IoFilterOutline size={20} className={`${theme === 'light' ? 'text-gray-700' : 'text-gray-400'}`} />
-          </button>
-
-          {showFilter && (
-            <div className={`absolute top-12 -right-24 w-96 shadow-md rounded-lg px-2 py-3 z-10 ${theme === 'light' ? 'bg-white' : 'bg-gray-900 text-gray-400'}`}>
-              <div className="flex flex-row gap-2">
-                <input
-                  type="date"
-                  placeholder="From Date"
-                  value={fromDate}
-                  onChange={(e) => setFromDate(e.target.value)}
-                  className={`p-2 border rounded-md ${theme === 'light' ? 'bg-slate-100 text-black' : 'bg-gray-700 text-gray-300'}`}
-                />
-                <input
-                  type="date"
-                  placeholder="To Date"
-                  value={toDate}
-                  onChange={(e) => setToDate(e.target.value)}
-                  className={`p-2 border rounded-md ${theme === 'light' ? 'bg-slate-100 text-black' : 'bg-gray-700 text-gray-300'}`}
-                />
-                <button
-                  className={`p-2 mt-2 rounded-md ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-blue-700 text-white'}`}
-                  onClick={handleFilter}
-                >
-                  Filter
-                </button>
-              </div>
-            </div>
-          )}
-        </div> */}
-
         <button
           onClick={handleTheme}
           className={`p-2 rounded-md ${theme === 'light' ? 'bg-white' : 'bg-gray-700'}`}
@@ -105,6 +80,15 @@ function Header({ onSearch, onView, view, theme, dark, on_filter, filter, onDate
           aria-label={`Switch to ${view ? 'card' : 'table'} view`}
         >
           {view ? <ImTable2 size={20} className={`${theme === 'light' ? 'text-gray-700' : 'text-gray-400'}`} /> : <IoCardOutline size={20} className={`${theme === 'light' ? 'text-gray-700' : 'text-gray-400'}`} />}
+        </button>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className={`p-2 rounded-md ${theme === 'light' ? 'bg-white' : 'bg-gray-700'}`}
+          aria-label="Logout"
+        >
+          Logout
         </button>
       </div>
     </header>

@@ -298,7 +298,7 @@ function Dashboard() {
       <div className="px-6 py-8 sm:p-10">
         <dl>
           <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Courses offered</dt>
-          <dd className="mt-1 text-4xl leading-9 font-semibold text-indigo-600 dark:text-indigo-400 mt-4">100</dd>
+          <dd className=" text-4xl leading-9 font-semibold text-indigo-600 dark:text-indigo-400 mt-4">100</dd>
         </dl>
       </div>
     </div>
@@ -306,7 +306,7 @@ function Dashboard() {
       <div className="px-6 py-8 sm:p-10">
         <dl>
           <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Tutors</dt>
-          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">19</dd>
+          <dd className=" text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">19</dd>
         </dl>
       </div>
     </div>
@@ -314,7 +314,7 @@ function Dashboard() {
       <div className="px-6 py-8 sm:p-10">
         <dl>
           <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Enrolled Courses</dt>
-          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">71</dd>
+          <dd className=" text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">71</dd>
         </dl>
       </div>
     </div>
@@ -322,7 +322,7 @@ function Dashboard() {
       <div className="px-6 py-8 sm:p-10">
         <dl>
           <dt className="text-lg leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Completed Courses</dt>
-          <dd className="mt-1 text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">16</dd>
+          <dd className=" text-4xl mt-4 leading-9 font-semibold text-indigo-600 dark:text-indigo-400">16</dd>
         </dl>
       </div>
     </div>

@@ -15,6 +15,8 @@ const Detailed_course = () => {
 
   const  course_id = id;
 
+  const userId = localStorage.getItem("userID");
+
   const [instructor, setInstructor] = useState({});
   const [course_modules, setCourseModules] = useState([]);
   const [course_outcome, setCourseOutcome] = useState([]);
@@ -70,7 +72,7 @@ const Detailed_course = () => {
   const handleEnroll = async(course_id) => {
     try {
       // Assuming a backend API call to enroll the user
-      await axios.post(`http://localhost:5000/enroll`, { course_id });
+      await axios.post(`http://localhost:5000/enroll`, { userId, course_id });
   
       // Navigate to the success page
       navigate(`/enrollment-success`, {

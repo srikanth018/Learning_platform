@@ -22,6 +22,7 @@ const db = mysql.createConnection({
   database: "learning_platform",
 });
 
+
 app.get('/api/courses_list', (req, res) => {
     const query = 'SELECT * FROM courses_list';
     db.query(query, (err, results) => {
@@ -68,7 +69,36 @@ app.get('/api/courses_list', (req, res) => {
       res.json(results);
     });
   });
-
+  function queryAsync(query, params) {
+    return new Promise((resolve, reject) => {
+      db.query(query, params, (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(results);
+      });
+    });
+  }
+  
+  app.get('/api/get-courses', async (req, res) => {
+    const { userId } = req.query;
+  
+    try {
+      const courses = await queryAsync(
+        `SELECT c.course_name, c.course_description, c.image_url 
+         FROM enrollments e 
+         JOIN courses_list c ON e.course_id = c.course_id 
+         WHERE e.user_id = ?`,
+        [userId]
+      );
+  
+      res.status(200).json(courses);
+    } catch (err) {
+      console.error('Error fetching enrolled courses:', err);
+      res.status(500).json({ message: 'Error fetching enrolled courses' });
+    }
+  });
+  
 
 
   
@@ -76,23 +106,30 @@ app.get('/api/courses_list', (req, res) => {
     const { username, email, password, role } = req.body;
   
     try {
-      // Check if user already exists
-      const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+      // Check if the user already exists
+      const rows = await queryAsync('SELECT * FROM users WHERE email = ?', [email]);
+      
       if (rows.length > 0) {
         return res.status(400).json({ message: 'User already exists' });
       }
   
+      // Get the current count of users
+      const countResults = await queryAsync('SELECT COUNT(*) as count FROM users');
+      const count = countResults[0].count;
+  
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      // Insert user into the database
+      // Insert the user into the database
       const query = 'INSERT INTO users (user_id, username, email, password, role) VALUES (?, ?, ?, ?, ?)';
-      const userId = `USR${Math.random().toString(36).substr(2, 9)}`; // Generate random user ID
-      await db.query(query, [userId, username, email, hashedPassword, role]);
+      const userId = `U${count + 1}`; // Generate user ID based on count
+  
+      await queryAsync(query, [userId, username, email, hashedPassword, role]);
   
       // Generate JWT token
       const token = jwt.sign({ email, role }, 'learnGlobs', { expiresIn: '1h' });
   
+      // Send the response after all operations are done
       res.status(201).json({
         message: 'User registered successfully',
         token,
@@ -104,6 +141,41 @@ app.get('/api/courses_list', (req, res) => {
     }
   });
   
+  
+  app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Fetch the user by email
+        const rows = await queryAsync('SELECT * FROM users WHERE email = ?', [email]);
+
+        // Check if the user exists
+        if (rows.length === 0) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        const user = rows[0];
+
+        // Compare the hashed password with the user's input
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ email: user.email, role: user.role }, 'learnGlobs', { expiresIn: '1h' });
+
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user: { username: user.username, role: user.role, user_id: user.user_id }
+        });
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
   const JDoodle_Client_Id = 'c4df430ac08c4d3852ccc21c4c8a940d';
 const JDoodle_Client_Secret = '673ec0904f9124a4f8f31515257af18a124f0cbedaf7466fa51e0797f17f9b07';
@@ -232,11 +304,11 @@ app.post('/stop-pdf', (req, res) => {
 
 // API to handle course enrollment
 app.post('/enroll', async (req, res) => {
-  const { course_id, user_id } = req.body; // Get user_id from req if required
+  const { userId, course_id } = req.body; // Get user_id from req if required
 
   try {
     // Insert into enrollment table (or any logic to handle enrollment)
-    await db.query('INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)', [user_id, course_id]);
+    await db.query('INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)', [userId, course_id]);
     res.status(200).json({ message: 'Enrolled successfully' });
   } catch (err) {
     console.error("Error enrolling in course:", err);
