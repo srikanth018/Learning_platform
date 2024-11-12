@@ -24,9 +24,9 @@ function Login() {
             const role = response.data.user.role;
 
             // Redirect based on the user's role
-            if (response.data.message === "Login successful") {
+            if (response.data.message === "Login successful" && role === "admin") {
                 navigate('/dashboard');
-            } else if (role === "student") {
+            } else if (response.data.message === "Login successful" && role === "learner") {
                 navigate('/student-dashboard');
             } else if (role === "teacher") {
                 navigate('/teacher-dashboard');

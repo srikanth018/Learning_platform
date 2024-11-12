@@ -68,9 +68,7 @@ function Sidebar({ theme }) {
     setIsMobileMenuOpen(false); 
   };
 
-  const handleTaskClick = () => {
-    setTaskExpanded(!taskExpanded);
-  };
+
 
   const getActiveClass = (name) => {
     if (active === name) {
@@ -79,12 +77,6 @@ function Sidebar({ theme }) {
     return '';
   };
 
-  const getSubTaskActiveClass = (subTask) => {
-    if (activeSubTask === subTask) {
-      return theme === 'light' ? 'bg-gray-100' : 'bg-gray-600';
-    }
-    return '';
-  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -99,27 +91,7 @@ function Sidebar({ theme }) {
         </button>
       </div>
 
-      {/* Mobile Sidebar */}
-      {isMobileMenuOpen && (
-        <div className={`fixed inset-0 bg-gray-900 bg-opacity-75 z-40`}>
-          <div className={`fixed top-0 left-0 w-64 h-full p-4 bg-white dark:bg-gray-800 z-50`}>
-            <nav className="mt-5">
-              <a
-                href="#"
-                className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('home')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
-                onClick={() => handleNavigation('/', 'home')}
-              >
-                <div className='flex flex-row p-2'>
-                  <div className='mt-1 px-2'>
-                    <ImHome />
-                  </div>
-                  Home
-                </div>
-              </a>
-            </nav>
-          </div>
-        </div>
-      )}
+
 
       <aside className={`hidden md:block w-48 border-r h-full ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-gray-700 border-slate-400 '}`}>
         <div className="p-4 px-6">
@@ -197,65 +169,7 @@ function Sidebar({ theme }) {
             </div>
           </a>
 
-{/* 
-          
-          {taskExpanded && (
-            <div className="ml-2">
 
-              <a
-                href="#"
-                className={`block py-2 px-6 rounded transition duration-200 ${getSubTaskActiveClass('design_center')} ${theme === 'light' ? 'text-gray-500 hover:bg-slate-100 hover:text-gray-600' : ' text-slate-400 hover:bg-gray-900'}`}
-                onClick={() => handleNavigation('/task/design_center', 'task')}
-              >
-                <div className='flex flex-row p-0'>
-                  <div className='mt-1 px-2'>
-                    <BsEye />
-                  </div>
-                  Design Center
-                </div>
-              </a>
-              <a
-                href="#"
-                className={`block py-2 px-6 rounded transition duration-200 ${getSubTaskActiveClass('detailed_task')} ${theme === 'light' ? 'text-gray-500 hover:bg-slate-100 hover:text-gray-600' : ' text-slate-400 hover:bg-gray-900'}`}
-                onClick={() => handleNavigation('/task/detailed_task', 'task')}
-              >
-                <div className='flex flex-row p-0'>
-                  <div className='mt-1 px-2'>
-                    <BsEye />
-                  </div>
-                  Detailed Task
-                </div>
-              </a>
-
-              { role == 'admin' && <a
-                href="#"
-                className={`block py-2 px-6 rounded transition duration-200 ${getSubTaskActiveClass('create')} ${theme === 'light' ? 'text-gray-500 hover:bg-slate-100 hover:text-gray-600' : ' text-slate-400 hover:bg-gray-900'}`}
-                onClick={() => handleNavigation('/task/create', 'task')}
-              >
-                <div className='flex flex-row p-0'>
-                  <div className='mt-1 px-2'>
-                    <BsPlusCircleDotted />
-                  </div>
-                  Create
-                </div>
-              </a>}
-              <a
-                href="#"
-                className={`block py-2 px-6 rounded transition duration-200 ${getSubTaskActiveClass('view')} ${theme === 'light' ? 'text-gray-500 hover:bg-slate-100 hover:text-gray-600' : ' text-slate-400 hover:bg-gray-900'}`}
-                onClick={() => handleNavigation('/task/view', 'task')}
-              >
-                <div className='flex flex-row p-0'>
-                  <div className='mt-1 px-2'>
-                    <BsEye />
-                  </div>
-                  View
-                </div>
-              </a>
-              
-            </div>
-          )}
-
- */}
           {<a
             href="#"
             className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('settings')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}

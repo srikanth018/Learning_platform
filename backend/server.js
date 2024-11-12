@@ -10,6 +10,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+// import request from 'request';
+
+
 
 const app = express();
 app.use(cors());
@@ -34,6 +37,46 @@ app.get('/api/courses_list', (req, res) => {
       res.json(results);
     });
   });
+
+  // Get a specific course by course_id
+app.get('/api/courses_list/:course_id', (req, res) => {
+  const courseId = req.params.course_id;
+  const query = 'SELECT * FROM courses_list WHERE course_id = ?';
+  
+  db.query(query, [courseId], (err, results) => {
+    if (err) {
+      console.error('Error fetching the course:', err);
+      res.status(500).send('Error fetching the course');
+      return;
+    }
+    if (results.length > 0) {
+      res.json(results[0]);
+    } else {
+      res.status(404).send('Course not found');
+    }
+  });
+});
+
+app.get('/api/courses_modules/:course_id', (req, res) => {
+  const courseId = req.params.course_id;
+  const query = 'SELECT * FROM course_modules WHERE course_id = ?';
+  
+  db.query(query, [courseId], (err, results) => {
+    if (err) {
+      console.error('Error fetching the course:', err);
+      res.status(500).send('Error fetching the course');
+      return;
+    }
+    if (results.length > 0) {
+      res.json(results);
+    } else {
+      res.status(404).send('Course not found');
+    }
+  });
+});
+
+
+
 
   app.get('/api/users', (req, res) => {
     const query = 'SELECT * FROM Users';
@@ -100,6 +143,21 @@ app.get('/api/courses_list', (req, res) => {
   });
   
 
+  app.get('/enrolled_courses/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Use queryAsync to execute the SQL query
+      const enrolledCourses = await queryAsync('SELECT course_id FROM enrollments WHERE user_id = ?', [userId]);
+      res.status(200).json(enrolledCourses);
+    } catch (err) {
+      console.error("Error fetching enrolled courses:", err);
+      res.status(500).json({ message: 'Error fetching enrolled courses' });
+    }
+  });
+  
+  
+  
 
   
   app.post('/api/register', async (req, res) => {
@@ -315,6 +373,18 @@ app.post('/enroll', async (req, res) => {
     res.status(500).json({ message: 'Error enrolling in course' });
   }
 });
+
+// app.get('/proxy/pdf', (req, res) => {
+//   const url = 'https://www.rgmcet.edu.in/assets/img/departments/CSE/materials/R15/3-2/Web%20Technologies.pdf';
+//   request({ url, encoding: null }, (err, response, body) => {
+//       if (!err && response.statusCode === 200) {
+//           res.setHeader('Content-Type', 'application/pdf');
+//           res.send(body);
+//       } else {
+//           res.status(500).send('Error fetching the PDF');
+//       }
+//   });
+// });
 
 
 

@@ -144,6 +144,7 @@ const Detailed_course = () => {
               <li key={outcome.course_outcome_id} className="flex items-center my-1 text-lg">
                 <TiTick className="text-green-500 text-2xl mr-2" />
                 {outcome.outcomes}
+                
               </li>
             ))}
           </ul>
