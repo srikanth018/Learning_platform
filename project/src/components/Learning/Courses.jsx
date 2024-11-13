@@ -38,9 +38,15 @@ function Courses() {
   };
 
   const handleEnroll = (course_id) => {
-    navigate(`/courses/detailed_course/${course_id}`, {
-      state: { course_id },
-    });
+    if (enrolledCourses.includes(course_id)) {
+      // Navigate to Start_course page if already enrolled
+      navigate(`/start_course/${course_id}`);
+    } else {
+      // Navigate to detailed_course page if not enrolled
+      navigate(`/courses/detailed_course/${course_id}`, {
+        state: { course_id },
+      });
+    }
   };
 
   return (

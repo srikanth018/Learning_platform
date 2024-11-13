@@ -156,8 +156,52 @@ app.get('/api/courses_modules/:course_id', (req, res) => {
     }
   });
   
+
+  app.get('/enrollment/:userId/:courseId', async (req, res) => {
+  const { userId, courseId } = req.params;
+
+  try {
+    // Fetch enrollment details based on userId and courseId
+    const enrollment = await queryAsync(
+      'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?',
+      [userId, courseId]
+    );
+
+    // Check if enrollment exists
+    if (enrollment.length === 0) {
+      return res.status(404).json({ message: 'Enrollment not found' });
+    }
+
+    res.status(200).json(enrollment[0]); // Return the first (and only) matching enrollment
+  } catch (err) {
+    console.error("Error fetching enrollment:", err);
+    res.status(500).json({ message: 'Error fetching enrollment' });
+  }
+});
+
   
-  
+app.put('/enrollment/increment_module/:userId/:courseId', async (req, res) => {
+  const { userId, courseId } = req.params;
+
+  try {
+    // Increment the module count by 1 for the specified enrollment
+    const result = await queryAsync(
+      'UPDATE enrollments SET module_count = module_count + 1 WHERE user_id = ? AND course_id = ?',
+      [userId, courseId]
+    );
+
+    // Check if the update was successful
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Enrollment not found' });
+    }
+
+    res.status(200).json({ message: 'Module count incremented successfully' });
+  } catch (err) {
+    console.error("Error incrementing module count:", err);
+    res.status(500).json({ message: 'Error incrementing module count' });
+  }
+});
+
 
   
   app.post('/api/register', async (req, res) => {

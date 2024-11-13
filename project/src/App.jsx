@@ -10,11 +10,11 @@ import Dashboard_learner from "./components/Learning/Dashboard-learner";
 import EnrollmentSuccessPage from "./components/Learning/EnrollmentSuccessPage";
 import Home from "./components/Learning/Home";
 import Pdf from "./components/Learning/PdfUploader ";
+import Speech_Rego from "./components/Learning/Speech_Rego";
+import Start_course from "./components/Learning/Start_course";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./PrivateRoute";
-import Start_course from "./components/Learning/Start_course";
-import Speech_Rego from "./components/Learning/Speech_Rego";
 
 function App() {
   return (
@@ -24,8 +24,22 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/student-dashboard" element={<PrivateRoute><Dashboard_learner /></PrivateRoute>} />
-          <Route path="/start_course" element={<PrivateRoute><Start_course /></PrivateRoute>} />
+          <Route
+            path="/student-dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard_learner />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/start_course/:course_id"
+            element={
+              <PrivateRoute>
+                <Start_course />
+              </PrivateRoute>
+            }
+          />
           <Route path="/speech" element={<Speech_Rego />} />
           <Route
             path="/dashboard"
