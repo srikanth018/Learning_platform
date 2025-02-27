@@ -9,6 +9,11 @@ export default defineConfig({
     include: ['pdfjs-dist/build/pdf.worker.entry'],
    
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:5000', // Replace with your backend port
+    },
+  },
   build: {
     rollupOptions: {
       output: {
@@ -21,6 +26,7 @@ export default defineConfig({
     },
   },
 });
+
 
 
 

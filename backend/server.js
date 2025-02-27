@@ -38,6 +38,100 @@ app.get('/api/courses_list', (req, res) => {
     });
   });
 
+  app.get('/api/courses_list_quizz', (req, res) => {
+    const query = 'SELECT course_id, course_name FROM courses_list';
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching courses:', err);
+        res.status(500).json({ error: 'Error fetching courses_list' });
+        return;
+      }
+      res.json(results); // Send results directly as JSON
+    });
+  });
+  
+  app.post('/api/submit_quiz', async (req, res) => {
+    const quizData = req.body;
+
+    // Check if quizData is an array and contains the expected data
+    if (!Array.isArray(quizData)) {
+        console.error('Expected quizData to be an array, but got:', quizData);
+        return res.status(400).json({ message: 'Invalid data format', error: 'Expected an array of questions' });
+    }
+
+    try {
+        await db.beginTransaction();
+
+        for (const question of quizData) {
+            // Validate question format
+            if (
+                !question || 
+                !question.course_id || 
+                !question.question_text || 
+                !Array.isArray(question.options) ||
+                question.options.length === 0
+            ) {
+                console.error('Invalid question format:', question);
+                await db.rollback();
+                return res.status(400).json({ message: 'Invalid question format', error: 'Each question must include course_id, question_text, and options' });
+            }
+
+            // Insert question into the database
+            const [questionResult] = await db.query(
+                'INSERT INTO quiz_questions (course_id, question_text) VALUES (?, ?)',
+                [question.course_id, question.question_text]
+            );
+
+            const questionId = questionResult.insertId;
+
+            // Prepare options for insertion
+            const optionsValues = question.options.map(option => {
+                if (!option.option_text || !option.option_label) {
+                    console.error('Invalid option format:', option);
+                    throw new Error('Invalid option format');
+                }
+                return [questionId, option.option_text, option.option_label];  // Make sure this is an array of arrays
+            });
+
+            // Check if optionsValues is an array of arrays
+            if (!Array.isArray(optionsValues) || !optionsValues.every(o => Array.isArray(o))) {
+                console.error('Invalid optionsValues format:', optionsValues);
+                throw new Error('Options values are not in the correct format');
+            }
+
+            console.log('Options Values:', optionsValues);  // Log options values for debugging
+
+            // Insert options into the database
+            await db.query(
+                'INSERT INTO quiz_options (question_id, option_text, option_label) VALUES ?',
+                [optionsValues]  // Ensure this is an array of arrays
+            );
+
+            // Insert correct answer into the database
+            await db.query(
+                'INSERT INTO quiz_answers (question_id, correct_option) VALUES (?, ?)',
+                [questionId, question.correct_answer]
+            );
+        }
+
+        await db.commit();
+        res.status(200).json({ message: 'Quiz submitted successfully!' });
+
+    } catch (error) {
+        await db.rollback();
+        console.error('Error submitting quiz:', error);  // Log the full error
+        res.status(500).json({ message: 'Error submitting quiz', error: error.message });
+    }
+});
+
+
+
+
+
+  
+  
+  
+
   // Get a specific course by course_id
 app.get('/api/courses_list/:course_id', (req, res) => {
   const courseId = req.params.course_id;
@@ -430,7 +524,54 @@ app.post('/enroll', async (req, res) => {
 //   });
 // });
 
+// Endpoint to get questions and options
+app.get('/api/quiz/:course_id', (req, res) => {
+  const courseId = req.params.course_id;
+  const query = `
+    SELECT q.question_id, q.question_text, o.option_id, o.option_text, o.option_label
+    FROM quiz_questions q
+    LEFT JOIN quiz_options o ON q.question_id = o.question_id
+    WHERE q.course_id = ?;
+  `;
+  db.query(query, [courseId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const questions = {};
+    result.forEach(row => {
+      if (!questions[row.question_id]) {
+        questions[row.question_id] = {
+          question_id: row.question_id,
+          question_text: row.question_text,
+          options: []
+        };
+      }
+      questions[row.question_id].options.push({
+        option_id: row.option_id,
+        option_text: row.option_text,
+        option_label: row.option_label
+      });
+    });
+    res.json(Object.values(questions));
+  });
+});
 
+// Endpoint to check answers
+app.post('/api/quiz/submit', (req, res) => {
+  const { answers } = req.body; // { question_id: option_label }
+
+  let correctCount = 0;
+  const query = `
+    SELECT question_id, correct_option 
+    FROM quiz_answers 
+    WHERE question_id IN (${Object.keys(answers).map(() => '?').join(', ')});
+  `;
+  db.query(query, Object.keys(answers), (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    result.forEach(row => {
+      if (answers[row.question_id] === row.correct_option) correctCount++;
+    });
+    res.json({ score: correctCount, total: result.length });
+  });
+});
 
 app.listen(5000, () => {
   console.log(`Server is listening on port ${5000}`);

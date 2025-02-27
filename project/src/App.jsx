@@ -15,6 +15,7 @@ import Start_course from "./components/Learning/Start_course";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./PrivateRoute";
+import QuizUploadForm from "./components/Learning/QuizUploadForm";
 
 function App() {
   return (
@@ -24,11 +25,20 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
           <Route
             path="/student-dashboard"
             element={
               <PrivateRoute>
                 <Dashboard_learner />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/quizz"
+            element={
+              <PrivateRoute>
+                <QuizUploadForm/>
               </PrivateRoute>
             }
           />

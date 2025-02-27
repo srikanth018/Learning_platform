@@ -7,6 +7,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { FaFilePdf } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import axios from "axios";  
+import Quiz from "./Quiz";
 
 function Start_course() {
   const [theme, setTheme] = useState(
@@ -25,7 +26,7 @@ function Start_course() {
     setActiveIndex1(activeIndex1 === index ? null : index);
   };
   const [showPdf, setShowPdf] = useState(false);
-
+  const [showQuiz, setShowQuiz] = useState(false);
   const handleShowPdf = () => {
     setShowPdf(!showPdf);
   };
@@ -86,6 +87,7 @@ function Start_course() {
   }
 
   const videoID = extractYouTubeID(course.vdo_url);
+const progress = (moduleCount-1)*10;
 
   return (
     <>
@@ -115,6 +117,25 @@ function Start_course() {
             )}
 
           </div>
+
+          <div className="relative pt-1 mx-10">
+  <div className="flex mb-2 items-center justify-between ">
+    <div>
+      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-indigo-600 bg-indigo-200">
+        Course {progress === 100 ? 'Completed':'in Progress'}
+      </span>
+    </div>
+    <div className="text-right">
+      <span className="text-xs font-semibold inline-block text-indigo-600">
+        {progress}%
+      </span>
+    </div>
+  </div>
+  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
+    <div style={{ width: `${progress}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"></div>
+  </div>
+</div>
+
           <div
             className={`mx-8 my-2 mb-6 px-10 py-7 border rounded-3xl ${
               theme === "dark"
@@ -221,6 +242,27 @@ function Start_course() {
   return null;
 })}
 
+<button
+              className="mt-5 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600"
+              onClick={() => setShowQuiz(true)}
+            >
+              Take Quiz
+            </button>
+
+            {showQuiz && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="relative bg-white rounded-lg shadow-lg p-6 m-4 w-full max-w-7xl h-auto max-h-[90vh] overflow-y-auto">
+                <button
+                  className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl"
+                  onClick={() => setShowQuiz(false)}
+                >
+                  X
+                </button>
+                <Quiz courseName={course.course_name} userName={'Sri'} />
+              </div>
+            </div>
+            
+            )}
 
           </div>
         </div>

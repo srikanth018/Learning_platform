@@ -170,7 +170,7 @@ function Sidebar({ theme }) {
           </a>
 
 
-          {<a
+          {/* {<a
             href="#"
             className={`block py-2 px-4 rounded transition duration-200 ${getActiveClass('settings')} ${theme === 'light' ? 'text-black hover:bg-slate-100 hover:text-gray-600' : ' text-slate-300 hover:bg-gray-900'}`}
             onClick={() => handleNavigation('/settings', 'settings')}
@@ -181,7 +181,7 @@ function Sidebar({ theme }) {
               </div>
               Settings
             </div>
-          </a>}
+          </a>} */}
         </nav>
 
         </nav>
